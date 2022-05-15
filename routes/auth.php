@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -53,4 +54,13 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
+});
+
+Route::prefix('profile')->middleware('auth')->group(function () {
+  Route::get('/', [ProfileController::class, 'index'])
+              ->name('profile.index');
+  // Route::get('/', [ProfileController::class, 'edit'])
+  //             ->name('profile.edit');
+  Route::post('/', [ProfileController::class, 'update'])
+              ->name('profile.update');
 });
