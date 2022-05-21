@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
+use App\Models\Thread;
 
 class ProfileController extends Controller
 {
@@ -38,5 +39,16 @@ class ProfileController extends Controller
         $user->introduce = $request->introduce;
         $user->save();
         return redirect('profile')->with('flash_message', 'ユーザー情報を編集しました');
+    }
+
+    public function home()
+    {
+        // with関数でリレーション関係にあるthreadモデルをUserモデルと一緒に取得する
+        $user    = User::with('thread')->latest()->findOrFail(Auth::id());
+        // $threads  = Thread::with('user')->orderBy('created_at', 'desc')->get();
+        $threads = Thread::latest()->get();
+        // $user::orderBy('created_at', 'desc');
+        dd($user);
+        return view('profile.home', compact('user', 'threads'));
     }
 }

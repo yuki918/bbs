@@ -64,3 +64,8 @@ Route::prefix('profile')->middleware('auth')->group(function () {
   Route::post('/', [ProfileController::class, 'update'])
               ->name('profile.update');
 });
+
+Route::middleware('auth')->group(function () {
+  Route::get('home', [ProfileController::class, 'home'])
+              ->name('profile.home');
+});

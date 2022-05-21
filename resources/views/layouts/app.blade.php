@@ -16,9 +16,11 @@
                 @include('layouts.navigation')
             </header>
             <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+            {{-- <div class="wrapper py-12 max-w-7xl mx-auto sm:px-6 lg:px-8"> --}}
+              <main class="main">
+                  {{ $slot }}
+              </main>
+            {{-- </div> --}}
         </div>
     </body>
 </html>
