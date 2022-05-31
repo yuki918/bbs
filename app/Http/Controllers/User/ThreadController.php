@@ -15,7 +15,21 @@ class ThreadController extends Controller
 
     public function __construct()
     {
-
+        $this->middleware('auth:users')
+              ->only(['edit', 'update', 'destroy']);
+        
+        $this->middleware(function($request, $next) {
+          $id = $request->route()->parameter('thread');
+          if(!is_null($id)) {
+            $threadUserId = Thread::findOrFail($id)->user->id;
+            $threadId = (int)$threadUserId;
+            $userId   = Auth::id();
+            if($threadId !== $userId) {
+              abort(404);
+            }
+          }
+          return $next($request);
+        });
     }
 
     /**
@@ -116,7 +130,8 @@ class ThreadController extends Controller
         $thread->first_comment = $request->first_comment;
         $thread->category_name = $request->category_name;
         $thread->save();
-        return redirect('home')->with('flash_message', 'スレッドの編集が完了しました。');
+        return redirect()->route('user.thread.show', ['thread' => $thread])
+                ->with('flash_message', 'スレッドの編集が完了しました。');
     }
 
     /**
