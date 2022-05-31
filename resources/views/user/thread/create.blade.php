@@ -4,7 +4,7 @@
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <h1 class="font-bold text-lg px-6 py-4 bg-gray-200">新規スレッド作成</h1>
         <div class="p-6 bg-white border-b border-gray-200">
-          <form action="{{ route('thread.store') }}" method="POST" enctype="multipart/form-data">
+          <form action="{{ route('user.thread.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div>
               <x-label for="title" :value="('スレッドのタイトル')" />

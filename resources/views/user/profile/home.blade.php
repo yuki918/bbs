@@ -5,7 +5,7 @@
         <h1 class="font-bold text-lg px-6 py-4 bg-gray-200">作成したスレッド</h1>
         <div class="p-6 bg-white border-b border-gray-200">
           @if (session('flash_message'))
-            <div class="max-w-7xl mx-auto mb-4 bg-blue-100 border border-blue-500 text-blue-700 px-4 py-3 rounded" role="alert">
+            <div class="max-w-7xl mx-auto mb-2 bg-blue-100 border border-blue-500 text-blue-700 px-4 py-3 rounded" role="alert">
               <p class="text-sm">{{ session('flash_message') }}</p>
             </div>
           @endif
@@ -30,11 +30,6 @@
       <div class="bg-white mt-8 overflow-hidden shadow-sm sm:rounded-lg">
         <h1 class="font-bold text-lg px-6 py-4 bg-gray-200">最新のスレッド</h1>
         <div class="p-6 bg-white border-b border-gray-200">
-          @if (session('flash_message'))
-            <div class="max-w-7xl mx-auto  bg-blue-100 border border-blue-500 text-blue-700 px-4 py-3 rounded" role="alert">
-              <p class="text-sm">{{ session('flash_message') }}</p>
-            </div>
-          @endif
           <div class="">
             @if(count($threads) > 0)
               @foreach($threads as $thread)
