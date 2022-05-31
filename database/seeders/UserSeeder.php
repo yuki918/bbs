@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'name'       => '未承認ユーザー',
+                'name'       => '名無しのごんべい',
                 'email'      => 'unauthorized@gmail.com',
                 'password'   => Hash::make("password1234"),
                 'created_at' => '2022/01/01 11:11:11',
