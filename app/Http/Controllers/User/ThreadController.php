@@ -16,8 +16,8 @@ class ThreadController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:users')
-              ->only(['edit', 'update', 'destroy']);
+        // $this->middleware('auth:users')
+        //       ->only(['edit', 'update', 'destroy']);
         
         $this->middleware(function($request, $next) {
           $id = $request->route()->parameter('thread');
@@ -26,11 +26,12 @@ class ThreadController extends Controller
             $threadId = (int)$threadUserId;
             $userId   = Auth::id();
             if($threadId !== $userId) {
-              abort(404);
+              // abort(404);
+              return redirect('/');
             }
           }
           return $next($request);
-        });
+        })->only(['edit', 'update', 'destroy']);
     }
 
     /**

@@ -11,6 +11,13 @@ use App\Models\Thread;
 
 class ProfileController extends Controller
 {
+
+    public function top()
+    {
+        $threads = Thread::latest()->get();
+        return view('user.top', compact('threads'));
+    }
+
     // public function index()
     // {
     //     $user = User::findOrFail(Auth::id());
@@ -48,7 +55,6 @@ class ProfileController extends Controller
         $user    = User::with('thread')->latest()->findOrFail(Auth::id());
         // $threads  = Thread::with('user')->orderBy('created_at', 'desc')->get();
         $threads = Thread::latest()->get();
-        // dd($user);
         return view('user.profile.home', compact('user', 'threads'));
     }
 }

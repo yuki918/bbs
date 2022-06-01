@@ -11,9 +11,10 @@ use App\Http\Controllers\User\Auth\VerifyEmailController;
 use App\Http\Controllers\User\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-  return view('user.welcome');
-});
+// Route::get('/', function () {
+//   return view('user.top');
+// });
+Route::get('/', [ProfileController::class, 'top'])->name('profile.top');
 
 Route::get('/dashboard', function () {
   return view('user.dashboard');
