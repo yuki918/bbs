@@ -16,9 +16,6 @@ class ThreadController extends Controller
 
     public function __construct()
     {
-        // $this->middleware('auth:users')
-        //       ->only(['edit', 'update', 'destroy']);
-        
         $this->middleware(function($request, $next) {
           $id = $request->route()->parameter('thread');
           if(!is_null($id)) {
@@ -26,7 +23,6 @@ class ThreadController extends Controller
             $threadId = (int)$threadUserId;
             $userId   = Auth::id();
             if($threadId !== $userId) {
-              // abort(404);
               return redirect('/');
             }
           }
@@ -62,31 +58,30 @@ class ThreadController extends Controller
      */
     public function store(Request $request)
     {
-        $user = User::findOrFail(Auth::id());
+        $user = User::find(Auth::id());
         $request->validate([
             'title'         => ['required', 'string', 'max:255'],
             'first_comment' => ['required', 'string'],
             'category_name' => ['required'],
         ]);
-        // if($user) {
+        if($user) {
             $thread = Thread::create([
                 'user_id'       => $user->id,
                 'title'         => $request->title,
                 'first_comment' => $request->first_comment,
                 'category_name' => $request->category_name,
             ]);
-            $thread->save();
-        // } else {
-        //     dd($request->all());
-        //     $thread = Thread::create([
-        //         'user_id'       => 1,
-        //         'title'         => $request->title,
-        //         'first_comment' => $request->first_comment,
-        //         'category_name' => $request->category_name,
-        //     ]);
-        //     $thread->save();
-        // }
-        return redirect('home')->with('flash_message', '新規スレッドを作成しました。');
+        } else {
+            $thread = Thread::create([
+                'user_id'       => 1,
+                'title'         => $request->title,
+                'first_comment' => $request->first_comment,
+                'category_name' => $request->category_name,
+            ]);
+        }
+        $thread->save();
+        return redirect()->route('user.thread.show', ['thread' => $thread])
+                ->with('flash_message', 'スレッドを作成しました。');
     }
 
     /**
@@ -144,6 +139,21 @@ class ThreadController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Thread::findOrFail($id)->delete();
+        return redirect()->route('user.profile.home')
+                ->with('flash_message', 'スレッドを削除しました。');
+    }
+
+    public function newest()
+    {
+        $threads = Thread::latest()->get();
+        dd($threads);
+        return view('user.thread.newest', compact('threads'));
+    }
+
+    public function poplular()
+    {
+        $threads = Thread::latest()->get();
+        return view('user.thread.poplular', compact('threads'));
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Thread;
+use App\Models\Comment;
 
 class ProfileController extends Controller
 {
@@ -53,8 +54,18 @@ class ProfileController extends Controller
     {
         // with関数でリレーション関係にあるthreadモデルをUserモデルと一緒に取得する
         $user    = User::with('thread')->latest()->findOrFail(Auth::id());
-        // $threads  = Thread::with('user')->orderBy('created_at', 'desc')->get();
+        $comment = User::with('comment.thread')->latest()->findOrFail(Auth::id());
         $threads = Thread::latest()->get();
-        return view('user.profile.home', compact('user', 'threads'));
+        // dd($comment->comment);
+        // $threadArray = array();
+        // foreach($comment->comment as $thread) {
+        //   $result = array_search($thread->thread_id, $threadArray);
+        //   if($result !== false) {
+        //     array_push($threadsArray,$thread->thread_id);
+        //     array_push($comment,$thread);
+        //   } 
+        //   dd($comment);
+        // }
+        return view('user.profile.home', compact('user', 'comment', 'threads'));
     }
 }

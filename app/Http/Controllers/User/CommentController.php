@@ -4,18 +4,13 @@ namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Thread;
+use App\Models\Comment;
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $comment = Comment::with('thread')->get();
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -33,20 +28,29 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request , $id)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        $user = User::find(Auth::id());
+        $thread = Thread::findOrFail($id);
+        $request->validate([
+            'comment' => ['required', 'string'],
+        ]);
+        if($user) {
+            $comment = Comment::create([
+                'user_id'   => $user->id,
+                'thread_id' => $thread->id,
+                'comment'   => $request->comment,
+            ]);
+        } else {
+            $comment = Comment::create([
+                'user_id'   => 1,
+                'thread_id' => $thread->id,
+                'comment'   => $request->comment,
+            ]);
+        }
+        $comment->save();
+        return redirect()->route('user.thread.show', ['thread' => $thread])
+                ->with('flash_message02', 'コメントを送信しました。');
     }
 
     /**
