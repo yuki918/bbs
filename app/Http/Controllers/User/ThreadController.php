@@ -37,7 +37,8 @@ class ThreadController extends Controller
      */
     public function index()
     {
-        //
+        $threads = Thread::latest()->get();
+        return view('user.thread.index', compact('threads'));
     }
 
     /**
@@ -144,16 +145,4 @@ class ThreadController extends Controller
                 ->with('flash_message', 'スレッドを削除しました。');
     }
 
-    public function newest()
-    {
-        $threads = Thread::latest()->get();
-        dd($threads);
-        return view('user.thread.newest', compact('threads'));
-    }
-
-    public function poplular()
-    {
-        $threads = Thread::latest()->get();
-        return view('user.thread.poplular', compact('threads'));
-    }
 }

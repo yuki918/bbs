@@ -668,9 +668,6 @@ select {
 .mr-5 {
   margin-right: 1.25rem;
 }
-.mb-8 {
-  margin-bottom: 2rem;
-}
 .mr-4 {
   margin-right: 1rem;
 }
@@ -688,6 +685,9 @@ select {
 }
 .mb-1 {
   margin-bottom: 0.25rem;
+}
+.mb-8 {
+  margin-bottom: 2rem;
 }
 .block {
   display: block;
@@ -1479,16 +1479,16 @@ select {
 }
 @media (min-width: 768px) {
 
-  .md\:mb-0 {
-    margin-bottom: 0px;
-  }
-
   .md\:mr-4 {
     margin-right: 1rem;
   }
 
   .md\:mt-0 {
     margin-top: 0px;
+  }
+
+  .md\:mb-0 {
+    margin-bottom: 0px;
   }
 
   .md\:w-auto {

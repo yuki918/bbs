@@ -19,11 +19,6 @@ class ProfileController extends Controller
         return view('user.top', compact('threads'));
     }
 
-    // public function index()
-    // {
-    //     $user = User::findOrFail(Auth::id());
-    //     return view('profile.index', compact('user'));
-    // }
     public function index()
     {
         $user = User::findOrFail(Auth::id());
@@ -56,16 +51,22 @@ class ProfileController extends Controller
         $user    = User::with('thread')->latest()->findOrFail(Auth::id());
         $comment = User::with('comment.thread')->latest()->findOrFail(Auth::id());
         $threads = Thread::latest()->get();
-        // dd($comment->comment);
-        // $threadArray = array();
-        // foreach($comment->comment as $thread) {
-        //   $result = array_search($thread->thread_id, $threadArray);
-        //   if($result !== false) {
-        //     array_push($threadsArray,$thread->thread_id);
-        //     array_push($comment,$thread);
-        //   } 
-        //   dd($comment);
-        // }
-        return view('user.profile.home', compact('user', 'comment', 'threads'));
+        $threadArray = [];
+        $comments    = [];
+        foreach($comment->comment as $thread) {
+          $result = array_search($thread->thread_id, $threadArray);
+          if($result === false) {
+            $threadArray[] = $thread->thread_id;
+            $comments[] = $thread;
+          } 
+        }
+        // dd($comments);
+        return view('user.profile.home', compact('user', 'comments', 'threads'));
+    }
+
+    public function mythread()
+    {
+        $user = User::with('thread')->latest()->findOrFail(Auth::id());
+        return view('user.profile.mythread', compact('user'));
     }
 }

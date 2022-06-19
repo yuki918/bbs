@@ -6,10 +6,7 @@
         <div class="p-6 bg-white border-b border-gray-200">
           <div>
             @if(count($threads) > 0)
-              @foreach($threads as $key => $thread)
-                @if($key > 9)
-                  @break
-                @endif
+              @foreach($threads as $thread)
                 <a href="{{route('user.thread.show', ['thread' => $thread->id])}}" class="block px-2 py-4 border-b border-black hover:opacity-80 hover:bg-gray-100 transition-all">
                   <h2>{{$thread->title}}</h2>
                   <div class="flex mt-1 flex-wrap md:flex-nowrap">

@@ -16,7 +16,7 @@
           </div>
         </form>
       </div> --}}
-      <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+      <div class="bg-white mt-8 overflow-hidden shadow-sm sm:rounded-lg">
         <h1 class="font-bold text-lg px-6 py-4 bg-gray-200">作成したスレッド</h1>
         <div class="p-6 bg-white border-b border-gray-200">
           @if (session('flash_message'))
@@ -26,7 +26,10 @@
           @endif
           <div class="">
             @if(count($user->thread) > 0)
-              @foreach($user->thread as $userThread)
+              @foreach($user->thread as $key => $userThread)
+                @if($key > 9)
+                  @break
+                @endif
                 <a href="{{route('user.thread.show', ['thread' => $userThread->id])}}" class="block px-2 py-4 border-b border-black hover:opacity-80 hover:bg-gray-100 transition-all">
                   <h2>{{$userThread->title}}</h2>
                   <div class="flex mt-1 flex-wrap md:flex-nowrap">
@@ -40,15 +43,20 @@
               <p>まだ作成されたスレッドがありません。</p>
             @endif
           </div>
+          <div class="text-right mt-4">
+            <a href="{{ route('user.profile.mythread') }}" class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg">もっと見る</a>
+          </div>
         </div>
       </div>
       <div class="bg-white mt-8 overflow-hidden shadow-sm sm:rounded-lg">
         <h1 class="font-bold text-lg px-6 py-4 bg-gray-200">コメントしたスレッド</h1>
         <div class="p-6 bg-white border-b border-gray-200">
           <div>
-            @if(count($comment->comment) > 0)
-              @foreach($comment->comment as $thread)
-                {{-- {{ $threadArray = array(); array_push($threadsArray,$thread->thread_id); }} --}}
+            @if(count($comments) > 0)
+              @foreach($comments as $key => $thread)
+                @if($key > 9)
+                  @break
+                @endif
                 <a href="{{route('user.thread.show', ['thread' => $thread->thread->id])}}" class="block px-2 py-4 border-b border-black hover:opacity-80 hover:bg-gray-100 transition-all">
                   <h2>{{$thread->thread->title}}</h2>
                   <div class="flex mt-1 flex-wrap md:flex-nowrap">
@@ -73,7 +81,10 @@
         <div class="p-6 bg-white border-b border-gray-200">
           <div class="">
             @if(count($threads) > 0)
-              @foreach($threads as $thread)
+              @foreach($threads as $key => $thread)
+                @if($key > 9)
+                  @break
+                @endif
                 <a href="{{route('user.thread.show', ['thread' => $thread->id])}}" class="block px-2 py-4 border-b border-black hover:opacity-80 hover:bg-gray-100 transition-all">
                   <h2>{{$thread->title}}</h2>
                   <div class="flex mt-1 flex-wrap md:flex-nowrap">
@@ -90,6 +101,9 @@
             @else
               <p>まだ作成されたスレッドがありません。</p>
             @endif
+          </div>
+          <div class="text-right mt-4">
+            <a href="{{ route('user.thread.index') }}" class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg">もっと見る</a>
           </div>
         </div>
       </div>

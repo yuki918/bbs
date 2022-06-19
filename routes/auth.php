@@ -77,6 +77,10 @@ Route::prefix('profile')->middleware('auth:users')->group(function () {
 Route::middleware('auth:users')->group(function () {
   Route::get('home', [ProfileController::class, 'home'])
               ->name('profile.home');
+  Route::get('mythread', [ProfileController::class, 'mythread'])
+              ->name('profile.mythread');
+  Route::get('mycomment', [ProfileController::class, 'mycomment'])
+              ->name('profile.mycomment');
 });
 
 require __DIR__.'/thread.php';
