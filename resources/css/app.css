@@ -1,3 +1,10 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+.pagination-wrapper > nav > .hidden {
+  justify-content: center;
+}
+.pagination-wrapper > nav > .hidden > div:first-child {
+  display: none;
+}

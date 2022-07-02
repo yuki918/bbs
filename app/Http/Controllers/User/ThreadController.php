@@ -35,9 +35,13 @@ class ThreadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $threads = Thread::latest()->get();
+        // dd($request);
+        $threads = Thread::selectCategory($request->category ?? '0')
+                    ->searchKeyword($request->keyword)
+                    ->sortOrder($request->sort)
+                    ->paginate($request->pagination ?? '10');
         return view('user.thread.index', compact('threads'));
     }
 

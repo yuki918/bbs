@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Thread;
 use App\Models\Comment;
+use Carbon\Carbon;
 
 class ProfileController extends Controller
 {
@@ -16,7 +17,19 @@ class ProfileController extends Controller
     public function top()
     {
         $threads = Thread::latest()->get();
-        return view('user.top', compact('threads'));
+        $popularThread = Thread::with('comment')->get();
+        foreach($popularThread as $thread) {
+          $counts[] = count($thread->comment);
+          $threadNmb[][] = $thread;
+        }
+        arsort($counts);
+        $keyNmb = array_keys($counts);
+        $slice_array = array_slice($keyNmb, 1, 10);
+        foreach($slice_array as $array) {
+          $popular_thread[] = $threadNmb[$array];
+        }
+        $popular_thread = call_user_func_array("array_merge", $popular_thread);
+        return view('user.top', compact('threads', 'popular_thread'));
     }
 
     public function index()
@@ -48,20 +61,38 @@ class ProfileController extends Controller
     public function home()
     {
         // with関数でリレーション関係にあるthreadモデルをUserモデルと一緒に取得する
-        $user    = User::with('thread')->latest()->findOrFail(Auth::id());
-        $comment = User::with('comment.thread')->latest()->findOrFail(Auth::id());
-        $threads = Thread::latest()->get();
+        $user = User::with(['thread' => function ($query) {
+            $query->orderBy('created_at', 'desc')->take(5);
+        }])->findOrFail(Auth::id());
+        $comment = User::with('comment.thread')->findOrFail(Auth::id());
+        $threads = Thread::latest()->take(5)->get();
+        $popularThread = Thread::with('comment')->get();
         $threadArray = [];
         $comments    = [];
+        $nmb = 1;
         foreach($comment->comment as $thread) {
           $result = array_search($thread->thread_id, $threadArray);
           if($result === false) {
             $threadArray[] = $thread->thread_id;
             $comments[] = $thread;
-          } 
+            $nmb++;
+            if($nmb === 6) {
+              break;
+            }
+          }
         }
-        // dd($comments);
-        return view('user.profile.home', compact('user', 'comments', 'threads'));
+        foreach($popularThread as $thread) {
+          $counts[] = count($thread->comment);
+          $threadNmb[][] = $thread;
+        }
+        arsort($counts);
+        $keyNmb = array_keys($counts);
+        $slice_array = array_slice($keyNmb, 1, 5);
+        foreach($slice_array as $array) {
+          $popular_thread[] = $threadNmb[$array];
+        }
+        $popular_thread = call_user_func_array("array_merge", $popular_thread);
+        return view('user.profile.home', compact('user', 'comments', 'threads', 'popular_thread'));
     }
 
     public function mythread()
